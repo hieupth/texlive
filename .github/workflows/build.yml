@@ -1,0 +1,34 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main']
+    paths:
+      - ".github/workflows/build.yml"
+      - "dockerfile"
+      - "entrypoint.sh"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Prepare Docker environment
+        uses: hieupth/gh-docker-actions/docker-prepare@main
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          free_disk_space: "true"
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: dockerfile
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/texlive:latest
