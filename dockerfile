@@ -1,7 +1,7 @@
 FROM texlive/texlive:latest
 
 LABEL maintainer="hieupth"
-LABEL description="TeX Live full installation with tlmgr for texlive"
+LABEL description="TeX Live full installation with tlmgr for latex"
 
 ENV DEBIAN_FRONTEND=noninteractive
 
